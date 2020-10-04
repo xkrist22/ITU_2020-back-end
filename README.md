@@ -1,8 +1,8 @@
-#Hra "Lodì" - ITU 2020 
-## Zadání
-Implementujte poèítaèovou variantu známé hry "Lodì" pro ètvereèkovanı papír. Hra bude podporovat síovou hru dvou hráèù. V první fázi hra umoní spojení dvou hráèù, ve druhé fázi bude probíhat rozmístìní nìkolika druhù lodí do hracího pole a tøetí fází bude samotná hra (souboj). Aplikace bude zobrazovat dvì hrací pole: hráèovy lodì a protihráèovo bitevní pole, také by mìla umoòovat komunikaci mezi hráèi bìhem hraní. 
+# Hra "LodÄ›" - ITU 2020 
+## ZadÃ¡nÃ­
+Implementujte poÄÃ­taÄovou variantu znÃ¡mÃ© hry "LodÄ›" pro ÄtvereÄkovanÃ½ papÃ­r. Hra bude podporovat sÃ­Å¥ovou hru dvou hrÃ¡ÄÅ¯. V prvnÃ­ fÃ¡zi hra umoÅ¾nÃ­ spojenÃ­ dvou hrÃ¡ÄÅ¯, ve druhÃ© fÃ¡zi bude probÃ­hat rozmÃ­stÄ›nÃ­ nÄ›kolika druhÅ¯ lodÃ­ do hracÃ­ho pole a tÅ™etÃ­ fÃ¡zÃ­ bude samotnÃ¡ hra (souboj). Aplikace bude zobrazovat dvÄ› hracÃ­ pole: hrÃ¡Äovy lodÄ› a protihrÃ¡Äovo bitevnÃ­ pole, takÃ© by mÄ›la umoÅ¾Åˆovat komunikaci mezi hrÃ¡Äi bÄ›hem hranÃ­. 
 
-## Tım
-- Køištof Jiøí - xkrist22
-- Hujíèek Patrik - xhujic00
-- Polišenskı Jan - xpolis04
+## TÃ½m
+- KÅ™iÅ¡tof JiÅ™Ã­ - xkrist22
+- HujÃ­Äek Patrik - xhujic00
+- PoliÅ¡enskÃ½ Jan - xpolis04
