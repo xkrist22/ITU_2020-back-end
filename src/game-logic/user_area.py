@@ -37,21 +37,21 @@ class user_area:
     def place_ship_cell(self, x, y):
         if (not self.is_valid_coordinates(x, y)):
             raise ValueError
-        self.__area[self.get_cell_index(x, y)] = user_area.ship_cell
+        self.get_area()[self.get_cell_index(x, y)] = user_area.ship_cell
         return True
 
     
     def place_unknown_cell(self, x, y):
         if (not self.is_valid_coordinates(x, y)):
             raise ValueError
-        self.__area[self.get_cell_index(x, y)] = user_area.unknown_cell
+        self.get_area()[self.get_cell_index(x, y)] = user_area.unknown_cell
         return True
 
 
     def is_cell_ship(self, x, y):
         if (not self.is_valid_coordinates(x, y)):
             raise ValueError
-        if (self.__area[self.get_cell_index(x, y)] == user_area.ship_cell):
+        if (self.get_area()[self.get_cell_index(x, y)] == user_area.ship_cell):
             return True
         else:
             return False
@@ -59,7 +59,7 @@ class user_area:
     def is_shooted_cell(self, x, y):
         if (not self.is_valid_coordinates(x, y)):
             raise ValueError
-        if (self.__area[self.get_cell_index(x, y)] == user_area.shooted_empty_cell or self.__area[self.get_cell_index(x, y)] == user_area.shooted_ship_cell):
+        if (self.get_area()[self.get_cell_index(x, y)] == user_area.shooted_empty_cell or self.get_area()[self.get_cell_index(x, y)] == user_area.shooted_ship_cell):
             return True
         else:
             return False
@@ -73,15 +73,15 @@ class user_area:
             raise ValueError
         
         if (self.is_cell_ship(x, y)):
-            self.__area[self.get_cell_index(x, y)] = user_area.shooted_ship_cell
+            self.get_area()[self.get_cell_index(x, y)] = user_area.shooted_ship_cell
             return True
         else:
-            self.__area[self.get_cell_index(x, y)] = user_area.shooted_empty_cell
+            self.get_area()[self.get_cell_index(x, y)] = user_area.shooted_empty_cell
             return False
 
 
     def all_ships_shooted(self):
-        if user_area.ship_cell in self.__area:
+        if user_area.ship_cell in self.get_area():
             return False
         else:
             return True
