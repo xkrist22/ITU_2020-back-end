@@ -16,6 +16,20 @@ def area_with_boat():
     return area
 
 
+@pytest.fixture
+def continuous_ship():
+    s = ship(3, 2)
+    s.place_ship_cell((0, 0), (1, 0), (2, 0), (1, 1))
+    return s
+
+
+@pytest.fixture
+def uncontinuous_ship():
+    s = ship(3, 3)
+    s.place_ship_cell((0, 0), (2, 2))
+    return s
+
+
 def test_user_area_creating(area):
     assert(isinstance(area.get_area(), list))
 
@@ -87,3 +101,19 @@ def test_ship_creating():
     assert(s.get_ship()[3] == ship.unknown_cell)
     assert(s.get_ship()[5] == ship.unknown_cell)
 
+    with pytest.raises(ValueError):
+        ship(42, 1)
+        ship(1, 42)
+
+
+def test_print_ship(area_with_boat):
+    print(area_with_boat.get_area())
+
+
+def test_removing_ship(area_with_boat):
+    area_with_boat.remove_ship(0, 0)
+    assert(not user_area.ship_cell in area_with_boat.get_area())
+
+def test_continuousity_ship(continuous_ship, uncontinuous_ship):
+    assert(continuous_ship.is_ship_continuous())
+    assert(not uncontinuous_ship.is_ship_continuous())
