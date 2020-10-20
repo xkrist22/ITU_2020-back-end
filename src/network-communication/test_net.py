@@ -1,24 +1,21 @@
-from server import network
+
+from client import client
+from server import server
+import time
 
 
 
-server = network()  # start server on local pc
+Server = server() # create server
+ip = Server.get_ip()
 
-ip = server.get_ip()
+client1 = client(ip, "test")
+client2 = client(ip, "test2")
+client3 = client(ip, "test3")
 
-client = network(ip, "some ID")# ip and host id
 
+client1.send("test!")
+client2.send("test@@")
 
-test_message = "hi there"
-test_message2 = "hello there"
+time.sleep(0.4)
 
-client.send(test_message)
-
-if server.recive() == test_message:
-    print("Sucess")
-
-############################################
-client.send(test_message2)
-
-if server.recive() == test_message2:
-    print("Seccond Sucess")
+print(client3.recive())
