@@ -1,3 +1,4 @@
+# coding=utf-8
 """
     Modul contains class for working with player game area. 
 """
@@ -6,7 +7,7 @@ __date__ = "2020-10-12"
 
 
 
-from ship import ship
+from . import ship
 
 class user_area:
     """
