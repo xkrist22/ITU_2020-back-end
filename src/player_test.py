@@ -13,19 +13,30 @@ ip = Server.get_ip() # get server ip
 
 player1 = player("username1", ip)
 
-player1.send_message("message1")
+player1.send_plain_message("message1")
 
 time.sleep(1)
 
 #build ships
 
+ships = []
+ships.append( ship(3, 2) )
+ships.append( ship(1, 1) )
+ships.append( ship(5, 2) )
+
+ships[0].place_ship_cell((0,0), (1,0), (2,0), (1,1))
+ships[1].place_ship_cell((0,0))
+ships[2].place_ship_cell((0,0), (1,0), (2,0), (3,0), (4,0), (1,1), (3,1))
+
+player1.get_own_area().place_ship(0, 0, ships[0])
+player1.get_own_area().place_ship(9, 0, ships[1])
+player1.get_own_area().place_ship(4, 4, ships[2])
 
 #game time
 
-shoot_targets = [(0,0),(0,1),(0,2),(4,3),(4,4),(4,5)]
+shoot_targets = [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6),(0,7),(0,8),(0,9),(3,4),(4,4),(5,4),(4,5),(9,9)]
 
-for i in range(0, 6):
-    x, y = shoot_targets[i]
+for x,y in shoot_targets:
     print("Shooting ",x, "/", y)
     player1.shoot(x, y)
     while True:

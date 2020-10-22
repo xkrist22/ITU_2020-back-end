@@ -43,8 +43,13 @@ class player:
     def get_enemy_area(self):
         return self.__enemy_area
 
-    def send_message(self, message: str):
+    def send_plain_message(self, message: str):
         self.get_client().send(message)
+    
+    def send_structured_message(self, action: str, data: dict):
+        obj = {"player": self.get_username(), "action": action, **data}
+        mes = json.dumps(obj)
+        self.get_client().send(mes)
     
     def recieve_messages(self):
         unread = self.get_unread_messages()
@@ -52,14 +57,8 @@ class player:
     
     def shoot(self, x: int, y: int):
         if(self.get_enemy_area().can_shoot(x, y)):
-            obj = {
-                "player": self.get_username(),
-                "action": "shoot",
-                "x": x,
-                "y": y
-            }
-            mes = json.dumps(obj)
-            self.send_message(mes)
+            self.send_structured_message("shoot", {"x": x, "y": y})
     
     def register_hit(self, x: int, y: int):
         self.get_own_area().shoot(x, y)
+    
