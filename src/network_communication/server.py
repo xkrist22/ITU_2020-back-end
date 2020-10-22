@@ -2,6 +2,7 @@ import socket
 import threading
 
 class server:
+
     def __init__(self):
         self.ip = socket.gethostbyname(socket.gethostname())
         threading.Thread(target=self.start_server,args=(self.ip,)).start()
