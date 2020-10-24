@@ -131,7 +131,9 @@ class user_area:
             width = s.get_width()
             while width:
                 if (self.get_area()[self.get_cell_index(x + width - 1, y + height - 1)] == user_area.ship_cell):
-                    raise ValueError("Cell [" + str(x + width - 1) + ", " + str(y + height - 1) + "] already contains sh")
+                    raise ValueError("Cell [" + str(x + width - 1) + ", " + str(y + height - 1) + "] already contains ship")
+                if (self.get_area()[self.get_cell_index(x + width - 1, y + height - 1)] == user_area.rock_cell):
+                    raise ValueError("Cell [" + str(x + width - 1) + ", " + str(y + height - 1) + "] contains rock")
                 self.get_area()[self.get_cell_index(x + width - 1, y + height - 1)] = s.get_ship()[s.get_cell_index(width - 1, height - 1)]
                 width = width - 1
             height = height - 1
