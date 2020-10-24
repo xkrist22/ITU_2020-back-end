@@ -7,6 +7,7 @@ __date__ = "2020-10-24"
 
 from ship import ship
 from random import randint
+from sys import maxsize
 
 
 class user_area:
@@ -292,12 +293,35 @@ class user_area:
                 self.get_area()[self.get_area().index(cell)] = user_area.unknown_cell
 
 
-    def generate_rocks(self, amount: int):
+    def place_rock_cell(self, x: int, y: int, from_generator: bool = False):
+        """
+            Method for placing rock cells into game area.
+
+            :param x: x-coordinate of the cell, where rock should be placed
+            :param y: y-coordinate of the cell, where rock should be placed
+            :param from_generator: param should be True, if method is called from rocks generator method, else should be false.
+        """
+        if (not from_generator):
+            # values from generator is always in game area – no need to check this
+            if (not self.is_valid_coordinates(x, y)):
+                raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
+        if (self.get_area()[self.get_cell_index(x, y)] != user_area.unknown_cell):
+            raise ValueError("Cannot place rock into cell [" + str(x) + ", " + str(y) + "] – cell is not empty")
+        
+        self.get_area()[self.get_cell_index(x, y)] = user_area.rock_cell
+
+
+    def generate_rocks(self, amount: int, tries_to_generate: int = maxsize):
         """
             Method for generating random rocks in player game area.
-            If method is called repeatedly, it regenerates rocks
+            If there is any rocks before calling this method, they
+            will be removed
         
             :param amount: amount of rocks which should be generated
+            :param tries_to_generate: amount of attemps for placing one rock cell before cancelling placing
+
+            warnings:: Method can potentionally run for long time due to
+                random generated coordintes – you can crop time using tries_to_generate param.
         """
         self.remove_rocks()
 
@@ -307,10 +331,12 @@ class user_area:
             raise ValueError("Cannot generate " + str(amount) + " rocks, game area contains only " + str(self.get_area().count(user_area.unknown_cell)) + " water cells")
 
         while(amount):
-            while True:
-                x = randint(0, self.get_x() - 1)
-                y = randint(0, self.get_y() - 1)
-                if (self.get_area()[self.get_cell_index(x, y)] == user_area.unknown_cell):
-                    self.get_area()[self.get_cell_index(x, y)] = user_area.rock_cell
+            while True and tries_to_generate:
+                try:
+                    x = randint(0, self.get_x() - 1)
+                    y = randint(0, self.get_y() - 1)
+                    self.place_rock_cell(x, y, True)
                     break
+                except ValueError:
+                    tries_to_generate -= 1
             amount -= 1

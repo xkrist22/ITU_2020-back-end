@@ -36,6 +36,18 @@ def enemy():
     return enemy_area(10, 10)
 
 
+@pytest.fixture
+def area_with_rocks():
+    a = user_area(5, 5)
+    a.place_rock_cell(0, 0)
+    return a
+
+
+@pytest.fixture
+def huge_area():
+    return user_area(10000, 10000)
+
+
 def test_user_area_creating(area):
     assert(isinstance(area.get_area(), list))
 
@@ -160,7 +172,7 @@ def test_shoot_bomb_into_enemy_area(enemy):
     enemy.shoot_bomb(1, 1)
     
 
-def test_place_rocks(area):
+def test_generating_rocks(area):
     area.generate_rocks(10)
     assert(user_area.rock_cell in area.get_area())
     assert(area.get_area().count(user_area.rock_cell) == 10)
@@ -173,3 +185,14 @@ def test_place_rocks(area):
         area.generate_rocks(101)
         area.generate_rocks(-5)
         area.generate_rocks(0)
+
+
+def test_rocks(area_with_rocks):
+    s = ship(1, 1)
+    s.place_ship_cell((0, 0))
+    with pytest.raises(ValueError):
+        area_with_rocks.place_ship(0, 0, s)
+    with pytest.raises(IndexError):
+        area_with_rocks.place_ship(-1, 0, s)
+        area_with_rocks.place_ship(0, -42, s)
+        area_with_rocks.place_ship(42, 42, s)
