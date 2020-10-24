@@ -22,7 +22,11 @@ class ship:
             :param width: width of the area for creating ship
             :param height: height of the area for creating ship
         """
-        
+        if (width <= 0):
+            raise IndexError("Width of ship cannot be zero or negative number")
+        if (height <= 0):
+            raise IndexError("Height of ship cannot be zero or negative number")
+
         if (width > ship.max_width):
             raise ValueError("Max width of the ship is 5")
         if (height > ship.max_height):
@@ -174,8 +178,13 @@ class ship:
             pass
 
 
-
     def is_ship_continuous(self) -> bool:
+        """
+            Method check if created ship is continuous – finds one ship cell and temporary removes it.
+            If there is at least one ship cell after removing ship, the ship is not continuous, else it is continuous
+
+            :return: Returns True, if created ship is continuous, else return False
+        """
         temp_ship = deepcopy(self)
         break_outer_cycle = False
         for temp_height in range(0, temp_ship.get_height()):

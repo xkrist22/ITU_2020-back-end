@@ -109,6 +109,8 @@ class user_area:
         while height:
             width = s.get_width()
             while width:
+                if (self.get_area()[self.get_cell_index(x + width - 1, y + height - 1)] == user_area.ship_cell):
+                    raise ValueError("Cell already contain ship")
                 self.get_area()[self.get_cell_index(x + width - 1, y + height - 1)] = s.get_ship()[s.get_cell_index(width - 1, height - 1)]
                 width = width - 1
             height = height - 1
@@ -116,7 +118,7 @@ class user_area:
 
     def remove_ship(self, x: int, y: int):
         """
-            Method for removing ship from game area. Method use flood-fill
+            Method for removing ship from game area. Method use flood-fill (4-surroundings)
 
             :param x: x-coordinate of one cell where ship is
             :param y: y-coordinate of one cell where ship is
@@ -212,13 +214,34 @@ class user_area:
         if (not self.is_valid_coordinates(x, y)):
             raise IndexError("Coordinate out of game area")
         if (self.is_shooted_cell(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise ValueError("Cell is already shooted")
         
         if (self.is_cell_ship(x, y)):
             self.get_area()[self.get_cell_index(x, y)] = user_area.shooted_ship_cell
             return True
         else:
             self.get_area()[self.get_cell_index(x, y)] = user_area.shooted_empty_cell
+            return False
+
+
+    def shoot_bomb(self, x: int, y: int) -> bool:
+        """
+            Method simulating shooting bomb into the player game area
+            Method is called when app get "shoot bomb info" from network
+            bomb causes shooting over 3x3 array
+
+            :param x: x-part of the center of the shooted grid
+            :param y: y-part of the center of the shooted grid
+            :return: returns True if at least one cell ship was shooted, else returns False
+        """
+
+        grid = [(x - 1, y - 1), (x, y - 1), (x + 1, y - 1), (x - 1, y), (x, y), (x + 1, y), (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)]
+        is_shooted_grid = []
+        for x_c, y_c in grid:
+            is_shooted_grid.append(self.shoot(x_c, y_c))
+        if(any(is_shooted_grid)):
+            return True
+        else:
             return False
 
 

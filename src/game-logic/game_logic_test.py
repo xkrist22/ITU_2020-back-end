@@ -1,5 +1,6 @@
 from user_area import user_area
 from ship import ship
+from enemy_area import enemy_area
 import pytest
 
 @pytest.fixture
@@ -28,6 +29,11 @@ def uncontinuous_ship():
     s = ship(3, 3)
     s.place_ship_cell((0, 0), (2, 2))
     return s
+
+
+@pytest.fixture
+def enemy():
+    return enemy_area(10, 10)
 
 
 def test_user_area_creating(area):
@@ -70,24 +76,29 @@ def test_shoot_into_water(area_with_boat):
 
 def test_shooting_again_into_ship(area_with_boat):
     area_with_boat.shoot(1,0)
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         area_with_boat.shoot(1,0)
 
     area_with_boat.shoot(5,5)
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         area_with_boat.shoot(5,5)
         
 
 def test_error_values(area_with_boat):
     with pytest.raises(IndexError):
+        # test non existing coordinates
         area_with_boat.place_unknown_cell(42, 42)
         area_with_boat.place_unknown_cell(10, 10)
         area_with_boat.shoot(42, 42)
         area_with_boat.shoot(10, 10)
     s = ship(1, 1)
     s.place_ship_cell((0, 0))
+    # place new ship into non existing coordinates
     with pytest.raises(IndexError):
         area_with_boat.place_ship(42, 42, s)
+    # place new ship onto existing ship
+    with pytest.raises(ValueError):
+        area_with_boat.place_ship(0, 0, s)
 
 
 def test_ship_creating():
@@ -104,6 +115,12 @@ def test_ship_creating():
     with pytest.raises(ValueError):
         ship(42, 1)
         ship(1, 42)
+    with pytest.raises(IndexError):
+        ship(-2, 1)
+        ship(1, -2)
+        ship(0, 1)
+        ship(1, 0)
+        ship(0, 0)
 
 
 def test_print_ship(area_with_boat):
@@ -117,3 +134,30 @@ def test_removing_ship(area_with_boat):
 def test_continuousity_ship(continuous_ship, uncontinuous_ship):
     assert(continuous_ship.is_ship_continuous())
     assert(not uncontinuous_ship.is_ship_continuous())
+
+
+def test_shooting_bomb(area_with_boat):
+    area_with_boat.shoot_bomb(1, 1)
+    assert(not user_area.ship_cell in area_with_boat.get_area())
+    assert(user_area.shooted_ship_cell in area_with_boat.get_area())
+    assert(user_area.shooted_empty_cell in area_with_boat.get_area())
+
+
+def test_shoot_bomb_into_enemy_area(enemy):
+    with pytest.raises(IndexError):
+        enemy.shoot_bomb(0, 0)
+        enemy.shoot_bomb(0, 1)
+        enemy.shoot_bomb(1, 0)
+        enemy.shoot_bomb(10, 10)
+        enemy.shoot_bomb(10, 0)
+        enemy.shoot_bomb(0, 10)
+        enemy.shoot_bomb(-5, 0)
+        enemy.shoot_bomb(-5, -42)
+    
+    # cannot determine return value due to using shooting_stub
+    # i am trying if method does not raise unexpected error
+    enemy.shoot_bomb(5, 5)
+    enemy.shoot_bomb(1, 1)
+    
+
+    
