@@ -45,6 +45,24 @@ class ship:
         return len(self.get_ship())
 
 
+    def __repr__(self):
+        """
+            Method printing game area in grid
+
+            :return: Returns string representation of the game area
+        """
+        i = 0
+        height = 0
+        width = self.get_width()
+        str_area = ""
+        while(i < self.get_height()):
+            str_area += (str(self.get_ship()[height:width]) + "\n")
+            height += self.get_height()
+            width += self.get_width()
+            i += 1
+        return str_area
+
+
     def get_ship(self) -> list:
         """
             Method returns ship list

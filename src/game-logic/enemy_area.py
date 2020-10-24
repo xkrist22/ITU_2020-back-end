@@ -26,6 +26,24 @@ class enemy_area:
         self.__area = [enemy_area.unknown_cell] * (width * height)
 
 
+    def __repr__(self):
+        """
+            Method printing game area in grid
+
+            :return: Returns string representation of the enemy area
+        """
+        i = 0
+        height = 0
+        width = self.get_x()
+        str_area = ""
+        while(i < self.get_y()):
+            str_area += (str(self.get_area()[height:width]) + "\n")
+            height += self.get_y()
+            width += self.get_x()
+            i += 1
+        return str_area
+
+
     def get_area(self) -> list:
         """
             Getter of the game area

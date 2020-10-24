@@ -173,4 +173,3 @@ def test_place_rocks(area):
         area.generate_rocks(101)
         area.generate_rocks(-5)
         area.generate_rocks(0)
-
