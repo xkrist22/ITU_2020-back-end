@@ -2,11 +2,12 @@
     Modul contains class for working with player game area. 
 """
 __author__ = "Jiří Křištof <xkrist22@stud.fit.vutbr.cz>"
-__date__ = "2020-10-12"
-
+__date__ = "2020-10-24"
 
 
 from ship import ship
+from random import randint
+
 
 class user_area:
     """
@@ -18,6 +19,7 @@ class user_area:
     ship_cell = 1
     shooted_ship_cell = 2
     shooted_empty_cell = 3
+    rock_cell = 4
 
 
     def __init__(self, width: int, height: int):
@@ -103,14 +105,14 @@ class user_area:
         """
 
         if (not self.is_valid_coordinates(x, y) or not self.is_valid_coordinates(x + s.get_width() - 1, y + s.get_height() - 1)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
         
         height = s.get_height() 
         while height:
             width = s.get_width()
             while width:
                 if (self.get_area()[self.get_cell_index(x + width - 1, y + height - 1)] == user_area.ship_cell):
-                    raise ValueError("Cell already contain ship")
+                    raise ValueError("Cell [" + str(x + width - 1) + ", " + str(y + height - 1) + "] already contains sh")
                 self.get_area()[self.get_cell_index(x + width - 1, y + height - 1)] = s.get_ship()[s.get_cell_index(width - 1, height - 1)]
                 width = width - 1
             height = height - 1
@@ -125,9 +127,9 @@ class user_area:
         """
     
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
         if (self.get_area()[self.get_cell_index(x, y)] != user_area.ship_cell):
-            raise ValueError("Cell does not contain ship")
+            raise ValueError("Cell [" + str(x) + ", " + str(y) + "] does not contain")
 
         self.get_area()[self.get_cell_index(x, y)] = user_area.unknown_cell
 
@@ -161,7 +163,7 @@ class user_area:
         """
 
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
         self.get_area()[self.get_cell_index(x, y)] = user_area.unknown_cell
 
 
@@ -176,7 +178,7 @@ class user_area:
         """
 
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
         if (self.get_area()[self.get_cell_index(x, y)] == user_area.ship_cell):
             return True
         else:
@@ -194,7 +196,7 @@ class user_area:
         """
 
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
         if (self.get_area()[self.get_cell_index(x, y)] == user_area.shooted_empty_cell or self.get_area()[self.get_cell_index(x, y)] == user_area.shooted_ship_cell):
             return True
         else:
@@ -212,9 +214,9 @@ class user_area:
         """
 
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
         if (self.is_shooted_cell(x, y)):
-            raise ValueError("Cell is already shooted")
+            raise ValueError("Cell [" + str(x) + ", " + str(y) + "] is already shooted")
         
         if (self.is_cell_ship(x, y)):
             self.get_area()[self.get_cell_index(x, y)] = user_area.shooted_ship_cell
@@ -257,3 +259,39 @@ class user_area:
             return False
         else:
             return True
+
+
+    def remove_rocks(self):
+        """
+            Method for removing rocks from user game area 
+        """
+
+        for cell in self.get_area():
+            if (cell == user_area.rock_cell):
+                self.get_area()[self.get_area().index(cell)] = user_area.unknown_cell
+
+
+    def generate_rocks(self, amount: int):
+        """
+            Method for generating random rocks in player game area.
+            If method is called repeatedly, it regenerates rocks
+        
+            :param amount: amount of rocks which should be generated
+        """
+        self.remove_rocks()
+
+        if (amount <= 0):
+            raise ValueError("Cannot generate " + str(amount) + "rocks")
+        if (amount > self.get_area().count(user_area.unknown_cell)):
+            raise ValueError("Cannot generate " + str(amount) + " rocks, game area contains only " + str(self.get_area().count(user_area.unknown_cell)) + " water cells")
+
+        while(amount):
+            while True:
+                x = randint(0, self.get_x() - 1)
+                y = randint(0, self.get_y() - 1)
+                if (self.get_area()[self.get_cell_index(x, y)] == user_area.unknown_cell):
+                    self.get_area()[self.get_cell_index(x, y)] = user_area.rock_cell
+                    break
+            amount -= 1
+
+

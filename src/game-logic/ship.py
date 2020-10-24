@@ -2,7 +2,7 @@
     Modul contains class for creating and working with ships
 """
 __author__ = "Jiří Křištof <xkrist22@stud.fit.vutbr.cz>"
-__date__ = "2020-10-12"
+__date__ = "2020-10-24"
 
 
 from copy import deepcopy
@@ -23,14 +23,14 @@ class ship:
             :param height: height of the area for creating ship
         """
         if (width <= 0):
-            raise IndexError("Width of ship cannot be zero or negative number")
+            raise IndexError("Width of ship cannot be" + str(width))
         if (height <= 0):
-            raise IndexError("Height of ship cannot be zero or negative number")
+            raise IndexError("Height of ship cannot be " + str(height))
 
         if (width > ship.max_width):
-            raise ValueError("Max width of the ship is 5")
+            raise ValueError("Max width of the ship is 5, your width: " + str(width))
         if (height > ship.max_height):
-            raise ValueError("Max height of the ship is 3")
+            raise ValueError("Max height of the ship is 3, your height: " + str(height))
         self.__width = width
         self.__height = height
         self.__ship_array = [ship.unknown_cell] * (width * height)
@@ -109,7 +109,7 @@ class ship:
         """
         for x, y in coordinates:
             if (not self.is_valid_coordinates(x, y)):
-                raise IndexError("Coordinate out of ship area")
+                raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of ship area")
             self.get_ship()[self.get_cell_index(x, y)] = ship.ship_cell
 
 
@@ -121,7 +121,7 @@ class ship:
             :param y: y-part of the coordinate
         """
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of ship area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of ship area")
         self.get_ship()[self.get_cell_index(x, y)] = ship.unknown_cell
 
 
@@ -135,7 +135,7 @@ class ship:
             :return: returns True, if cell contain ship, else return False
         """
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of ship area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of ship area")
         if (self.get_ship()[self.get_cell_index(x, y)] == ship.ship_cell):
             return True
         else:
@@ -151,9 +151,9 @@ class ship:
         """
 
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of ship area")
         if (self.get_ship()[self.get_cell_index(x, y)] != ship.ship_cell):
-            raise ValueError("Cell does not contain ship")
+            raise ValueError("Cell [" + str(x) + ", " + str(y) + "] does not contain ship")
 
         self.get_ship()[self.get_cell_index(x, y)] = ship.unknown_cell
 

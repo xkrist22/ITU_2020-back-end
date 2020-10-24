@@ -160,4 +160,17 @@ def test_shoot_bomb_into_enemy_area(enemy):
     enemy.shoot_bomb(1, 1)
     
 
-    
+def test_place_rocks(area):
+    area.generate_rocks(10)
+    assert(user_area.rock_cell in area.get_area())
+    assert(area.get_area().count(user_area.rock_cell) == 10)
+    area.remove_rocks()
+    assert(not user_area.rock_cell in area.get_area())
+    # try to generate map containing only rocks
+    area.generate_rocks(100)
+
+    with pytest.raises(ValueError):
+        area.generate_rocks(101)
+        area.generate_rocks(-5)
+        area.generate_rocks(0)
+

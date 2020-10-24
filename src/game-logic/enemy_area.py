@@ -1,3 +1,9 @@
+"""
+    Modul contains class for working with enemy game area. 
+"""
+__author__ = "Jiří Křištof <xkrist22@stud.fit.vutbr.cz>"
+__date__ = "2020-10-24"
+
 import random
 
 
@@ -48,7 +54,7 @@ class enemy_area:
 
     def is_shooted_cell(self, x: int, y: int) -> bool:
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of enemy area")
         if (self.get_area()[self.get_cell_index(x, y)] == enemy_area.shooted_empty_cell or self.get_area()[self.get_cell_index(x, y)] == enemy_area.shooted_ship_cell):
             return True
         else:
@@ -108,9 +114,9 @@ class enemy_area:
         """
 
         if (not self.is_valid_coordinates(x, y)):
-            raise IndexError("Coordinate out of game area")
+            raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of enemy area")
         if (self.is_shooted_cell(x, y)):
-            raise ValueError("Cell is already shooted")
+            raise ValueError("Cell [" + str(x) + ", " + str(y) + "] is already shooted")
         
         #TODO network communication – is selected cell ship, or water
         is_ship = self.shooting_stub() # this info should be extracted from network communication
