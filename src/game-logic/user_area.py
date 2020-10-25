@@ -22,6 +22,8 @@ class user_area:
     shooted_empty_cell = 3
     rock_cell = 4
 
+    min_width = 6
+    min_height = 6
 
     def __init__(self, width: int, height: int):
         """
@@ -31,6 +33,10 @@ class user_area:
             :param height: height of the game area
             :return: returns nothing
         """
+        if (width < user_area.min_width):
+            raise ValueError("Width must be at least " + str(user_area.min_width) + ", not " + str(width))
+        if (height < user_area.min_height):
+            raise ValueError("Height must be at least " + str(user_area.min_height) + ", not " + str(height))
 
         self.__x = width
         self.__y = height
@@ -126,6 +132,9 @@ class user_area:
 
         if (not self.is_valid_coordinates(x, y) or not self.is_valid_coordinates(x + s.get_width() - 1, y + s.get_height() - 1)):
             raise IndexError("Coordinate [" + str(x) + ", " + str(y) + "] out of game area")
+
+        if (not s.is_ship_continuous()):
+            raise ValueError("Inserted ship is not continuous!")
         
         height = s.get_height() 
         while height:
@@ -175,7 +184,55 @@ class user_area:
         except (ValueError, IndexError):
             pass
 
-   
+
+    def generate_ships(self, ship_count: int = 5, max_length: int = 5, tries_to_place: int = 3):
+        """
+            Method for generating ships – method places 4 random ships into game area
+
+            :param ship_count: Param determine hoe many ships should be generated
+            :param max_length: Param set maximun ship cells, defaultly is 5
+            :param tries_to_place: Set maximum amount of attemps inserting ship into area
+
+            warnings:: Method can potentionally run for a long time, time can be
+                cropped using max_length and tries_to_place params
+        """
+
+        if (ship_count <= 0):
+            raise ValueError("Method cannot generate " + str(ship_count) + "ships")
+        if (max_length <= 0):
+            raise ValueError("Ship length must be positive number, not " + str(max_length))
+        if (tries_to_place <= 0):
+            raise ValueError("Amount of attemps to place ship must be positive, not " + str(tries_to_place))
+
+
+        while ship_count:
+            # generate ship
+            s = ship(ship.max_width, ship.max_height)
+            cell_counter = max_length
+            while cell_counter:
+                while True:
+                    try:
+                        x = randint(0, ship.max_width - 1)
+                        y = randint(0, ship.max_height - 1)
+                        s.place_ship_cell((x, y))
+                        break
+                    except ValueError:
+                        pass
+                cell_counter -= 1
+            if (not s.is_ship_continuous()):
+                continue
+            # place ship into area
+            attemp = tries_to_place
+            while attemp:
+                try:
+                    x = randint(0, self.get_x() - s.get_width() - 1)
+                    y = randint(0, self.get_y() - s.get_height() - 1)
+                    self.place_ship(x, y, s)
+                except ValueError:
+                    attemp -= 1
+            ship_count -= 1
+            
+ 
     def place_unknown_cell(self, x: int, y: int):
         """
             Method for inserting unknown cell (means water) into the game area
