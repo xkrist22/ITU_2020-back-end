@@ -1,3 +1,4 @@
+# coding=utf-8
 """
     Modul contains class for creating and working with ships
 """

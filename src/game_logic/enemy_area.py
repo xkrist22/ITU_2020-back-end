@@ -54,6 +54,13 @@ class enemy_area:
             return False 
 
 
+    def can_shoot(self, x: int, y: int) -> bool:
+        if (not self.is_valid_coordinates(x, y)):
+            return False
+        if (self.is_shooted_cell(x, y)):
+            return False
+        return True
+    
     def shoot(self, x: int, y: int):
         if (not self.is_valid_coordinates(x, y)):
             raise ValueError
