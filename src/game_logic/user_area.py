@@ -5,7 +5,7 @@
 __author__ = "Jiří Křištof <xkrist22@stud.fit.vutbr.cz>"
 __date__ = "2020-10-24"
 
-from ship import ship
+from .ship import ship
 from random import randint
 from sys import maxsize
 

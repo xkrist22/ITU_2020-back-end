@@ -16,7 +16,7 @@ class player:
 
         self.__username = username
         self.__ip = ip
-        self.__client = client(ip, username)
+        self.__client = client(ip, None, username)
         self.__unread_messages = []
         self.__own_area = user_area(10, 10)
         self.__enemy_area = enemy_area(10, 10)
