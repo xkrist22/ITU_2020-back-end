@@ -4,15 +4,16 @@ from server import server
 import time
 
 
-
-Server = server() # create server
+port = 30000
+Server = server(port) # create server and enter port
 ip = Server.get_ip() # get server ip
 
 
 
-client1 = client(ip, "test") # client require ip of server and Uniqe ID
-client2 = client(ip, "test2")
-client3 = client(ip, "test3")
+
+client1 = client(ip, port, "test") # client require ip of server, port and Unique ID
+client2 = client(ip, port,  "test2") #port is not required and Default is 30000
+client3 = client(ip, port,  "test3")
 
 print("__________________________________")
 client1.send("test!")   # broadcast message to other clients
@@ -35,3 +36,8 @@ list.append("test@@")
 if list == client3.recive():
     print("Client.recive contain all unread brodcasted messages...")
     print("succes")
+
+
+time.sleep(0.5) # some delay in communication
+
+client1.exit()

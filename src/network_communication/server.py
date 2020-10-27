@@ -3,14 +3,18 @@ import threading
 
 class server:
 
-    def __init__(self):
+    def __init__(self, port=None):
+        if port is not None:
+            self.port = port
+        else:
+            self.port = 30000
         self.ip = socket.gethostbyname(socket.gethostname())
         threading.Thread(target=self.start_server,args=(self.ip,)).start()
 
     def start_server(self, ip):
         self.s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.clients = []
-        self.s.bind((ip ,30000))
+        self.s.bind((ip ,self.port))
         self.s.listen(100)
         self.username_lookup = {}
         print("server OK ")
@@ -36,7 +40,6 @@ class server:
                 c.shutdown(socket.SHUT_RDWR)
                 self.clients.remove(c)
                 self.broadcast(str(self.username_lookup[c])+' has left the room.')
-
                 break
 
             if msg.decode() != '':
