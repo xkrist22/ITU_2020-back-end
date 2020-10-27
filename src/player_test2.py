@@ -7,9 +7,8 @@ from player import player
 import time
 import json
 
-
-Server = server() # create server
-ip = Server.get_ip() # get server ip
+ip = "127.0.1.1"
+#ip = "192.168.0.1"
 
 player1 = player("username2", ip)
 
